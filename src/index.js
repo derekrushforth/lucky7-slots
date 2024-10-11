@@ -3,15 +3,24 @@ const colors = require("ansi-colors");
 const Table = require("cli-table3");
 const yargs = require("yargs/yargs");
 const { hideBin } = require("yargs/helpers");
+const {
+  title,
+  screen,
+  mainBox,
+  totalBox,
+  slotsBox,
+  betBox,
+  messageBox,
+  instructionsBox,
+  payoutScreen,
+  instructionsContent
+} = require("./ui");
 
 const argv = yargs(hideBin(process.argv)).option("manual", {
   alias: "m",
   type: "boolean",
   description: "Enable manual stop mode",
 }).argv;
-
-const title = `█   █ █ █▀▀ █▄▀ █▄█ ▀▀█
-█▄▄ █▄█ █▄▄ █ █  █    █`;
 
 const slotChars = ["7", "×", "o"];
 
@@ -28,87 +37,6 @@ let slots = [
   [slotChars[1], slotChars[0], slotChars[1]],
   [slotChars[2], slotChars[0], slotChars[2]],
 ];
-
-const screen = blessed.screen({
-  smartCSR: true,
-  title: "Slots",
-});
-
-const mainBox = blessed.box({
-  top: 0,
-  left: 0,
-  width: "100%",
-  height: "100%",
-});
-
-const contentBox = blessed.box({
-  parent: mainBox,
-  top: "center",
-  left: "center",
-  width: "50%",
-  height: 16, // Fixed height to accommodate all elements
-  align: "center",
-  valign: "middle",
-});
-
-const totalBox = blessed.box({
-  parent: contentBox,
-  top: 0,
-  width: "100%",
-  height: 4,
-  content: "",
-  align: "center",
-});
-
-const slotsBox = blessed.box({
-  parent: contentBox,
-  top: 6,
-  width: "100%",
-  height: 5,
-  content: "",
-  align: "center",
-});
-
-const betBox = blessed.box({
-  parent: contentBox,
-  top: 12,
-  width: "100%",
-  height: 1,
-  content: "",
-  align: "center",
-});
-
-const messageBox = blessed.box({
-  parent: contentBox,
-  top: 10,
-  width: "100%",
-  height: 1,
-  content: "",
-  align: "center",
-});
-
-const instructionsContent =
-  "[←][→] Change Bet   [Enter] Spin   [P] Payouts   [Q] Quit";
-
-const instructionsBox = blessed.box({
-  parent: mainBox,
-  bottom: 1,
-  left: "center",
-  width: "100%",
-  height: 1,
-  content: colors.gray(instructionsContent),
-  align: "center",
-});
-
-// Replace payoutBox with payoutScreen
-const payoutScreen = blessed.box({
-  parent: screen,
-  top: 0,
-  left: 0,
-  width: "100%",
-  height: "100%",
-  hidden: true,
-});
 
 screen.append(mainBox);
 
@@ -268,7 +196,6 @@ function hidePayoutScreen() {
 function promptUser() {
   screen.lockKeys = false;
   screen.key(["left", "right", "enter", "q", "p"], (ch, key) => {
-
     switch (key.name) {
       case "left":
         if (isSpinning) return;
@@ -280,7 +207,7 @@ function promptUser() {
         }
         break;
       case "right":
-        if(isSpinning) return;
+        if (isSpinning) return;
         if (payoutScreen.hidden) {
           currentBetIndex = (currentBetIndex + 1) % betOptions.length;
           bet = betOptions[currentBetIndex];
