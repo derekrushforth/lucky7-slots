@@ -16,15 +16,8 @@ const {
   payoutBox,
   instructionsContent,
 } = require('./ui');
-const {
-  titleSpeed,
-  animateTitleFrame,
-  titleFrames,
-  title,
-  logo,
-  logoFrames,
-  animateLogoFrame,
-} = require('./title');
+const { titleSpeed, animateTitleFrame, titleFrames, title } = require('./title');
+const { animateLogoFrame } = require('./logo');
 const { formatDollarAmount } = require('./utils');
 
 const argv = yargs(hideBin(process.argv)).option('manual', {
@@ -127,7 +120,7 @@ function spin() {
   // Animate title and logo
   titleAnimationInterval = setInterval(() => {
     currentTitleFrameIndex = (currentTitleFrameIndex + 1) % titleFrames.length;
-    currentLogoFrameIndex = (currentLogoFrameIndex + 1) % logoFrames.length;
+    currentLogoFrameIndex = (currentLogoFrameIndex + 1);
     updateUI();
   }, titleSpeed);
 
