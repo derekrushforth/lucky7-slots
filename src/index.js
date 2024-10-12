@@ -34,10 +34,10 @@ const argv = yargs(hideBin(process.argv)).option('manual', {
 }).argv;
 
 let total = 100;
-let bet = 5;
-const slotSpeed = 100;
+let bet = 1;
+const slotSpeed = 1000;
 const slotTimeout = 2000;
-const betOptions = [5, 10, 25, 50, 100];
+const betOptions = [1, 10, 25, 50, 100, 1000];
 let currentBetIndex = 0;
 let isSpinning = false;
 let spinInterval;
@@ -112,11 +112,14 @@ function spin() {
   // Spin the slots
   spinInterval = setInterval(() => {
     if (isSpinning) {
-      slots = slots.map(() => [
-        getRandomChar(),
-        getRandomChar(),
-        getRandomChar(),
-      ]);
+      slots = slots.map((column) => {
+        // Move existing characters down
+        column[2] = column[1];
+        column[1] = column[0];
+        // Generate new character for the top row
+        column[0] = getRandomChar();
+        return column;
+      });
       updateUI();
     }
   }, slotSpeed);
