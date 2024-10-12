@@ -23,7 +23,7 @@ const contentBox = blessed.box({
   top: "center",
   left: "center",
   width: "50%",
-  height: 16,
+  height: 23,
   align: "center",
   valign: "middle",
 });
@@ -32,32 +32,32 @@ const totalBox = blessed.box({
   parent: contentBox,
   top: 0,
   width: "100%",
-  height: 4,
+  height: 25,
   content: "",
   align: "center",
 });
 
 const slotsBox = blessed.box({
   parent: contentBox,
-  top: 6,
+  top: 11,
   width: "100%",
   height: 5,
   content: "",
   align: "center",
 });
 
-const betBox = blessed.box({
+const messageBox = blessed.box({
   parent: contentBox,
-  top: 12,
+  top: 16,
   width: "100%",
   height: 1,
   content: "",
   align: "center",
 });
 
-const messageBox = blessed.box({
+const betBox = blessed.box({
   parent: contentBox,
-  top: 10,
+  top: 19,
   width: "100%",
   height: 1,
   content: "",

@@ -16,7 +16,7 @@ const {
   payoutBox,
   instructionsContent,
 } = require("./ui");
-const { titleSpeed,animateTitleFrame, titleFrames, title } = require("./title");
+const { titleSpeed, animateTitleFrame, titleFrames, title, logo,logoFrames, animateLogoFrame } = require("./title");
 const { formatDollarAmount } = require("./utils");
 
 const argv = yargs(hideBin(process.argv)).option("manual", {
@@ -29,12 +29,13 @@ let total = 100;
 let bet = 5;
 const slotSpeed = 100;
 const slotTimeout = 2000;
-const betOptions = [5, 10, 25];
+const betOptions = [5, 10, 25, 50, 100];
 let currentBetIndex = 0;
 let isSpinning = false;
 let spinInterval;
 let titleAnimationInterval;
 let currentTitleFrameIndex = 0;
+let currentLogoFrameIndex = 0;
 
 const slotSettings = {
   [slotChars[0]]: { multiplier: 20, label: slotChars[0].repeat(3) }, // 777
@@ -55,17 +56,8 @@ function getRandomChar() {
 }
 
 function updateUI(message = "") {
-  const betSelectionDisplay = betOptions
-    .map((option, index) => {
-      const isSelected = index === currentBetIndex;
-      const indicator = isSelected ? colors.green("[*]") : colors.gray("[ ]");
-      const optionColor = isSelected ? colors.green : colors.gray;
-      return `${indicator} ${optionColor(formatDollarAmount(option))}`;
-    })
-    .join("  ");
-
   totalBox.setContent(
-    `${animateTitleFrame(titleFrames[currentTitleFrameIndex])}\n\n${
+    `${animateLogoFrame(currentLogoFrameIndex)}\n\n${animateTitleFrame(titleFrames[currentTitleFrameIndex])}\n\n${
       total < 5
         ? colors.red(formatDollarAmount(total))
         : colors.green(formatDollarAmount(total))
@@ -78,7 +70,14 @@ function updateUI(message = "") {
       colors.gray(`[ ${slots[0][2]} | ${slots[1][2]} | ${slots[2][2]} ]`),
   );
 
-  betBox.setContent(betSelectionDisplay);
+  betBox.setContent(betOptions
+    .map((option, index) => {
+      const isSelected = index === currentBetIndex;
+      const indicator = isSelected ? colors.green("[*]") : colors.gray("[ ]");
+      const optionColor = isSelected ? colors.green : colors.gray;
+      return `${indicator} ${optionColor(formatDollarAmount(option))}`;
+    })
+    .join("  "));
 
   // Update message content
   if (argv.manual && isSpinning) {
@@ -100,6 +99,7 @@ function spin() {
   isSpinning = true;
   total -= bet;
 
+  // Spin the slots
   spinInterval = setInterval(() => {
     if (isSpinning) {
       slots = slots.map(() => [
@@ -111,8 +111,10 @@ function spin() {
     }
   }, slotSpeed);
 
+  // Animate title and logo
   titleAnimationInterval = setInterval(() => {
     currentTitleFrameIndex = (currentTitleFrameIndex + 1) % titleFrames.length;
+    currentLogoFrameIndex = (currentLogoFrameIndex + 1) % logoFrames.length;
     updateUI();
   }, titleSpeed);
 
@@ -130,6 +132,7 @@ function stopSpinning() {
 
   const message = checkWin(slots.map((column) => column[1]));
   currentTitleFrameIndex = 0;
+  currentLogoFrameIndex = 0;
   updateUI(message);
   screen.lockKeys = false;
 }
@@ -160,12 +163,12 @@ function togglePayoutScreen() {
 
 function showPayoutScreen() {
   const table = new Table({
-    head: ["", "$5", "$10", "$25"],
+    head: ["", ...betOptions.map(bet => formatDollarAmount(bet))],
     style: {
       head: ["cyan"],
       border: ["gray"],
     },
-    colAligns: ["left", "right", "right", "right"],
+    colAligns: ["left", ...betOptions.map(() => "right")],
   });
 
   // Sort slotSettings by multiplier in descending order
