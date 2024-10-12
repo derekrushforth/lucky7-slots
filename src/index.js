@@ -35,7 +35,7 @@ const argv = yargs(hideBin(process.argv)).option('manual', {
 
 let total = 100;
 let bet = 1;
-const slotSpeed = 1000;
+const slotSpeed = 150;
 const slotTimeout = 2000;
 const betOptions = [1, 10, 25, 50, 100, 1000];
 let currentBetIndex = 0;
