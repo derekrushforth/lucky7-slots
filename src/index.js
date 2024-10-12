@@ -1,8 +1,8 @@
-const blessed = require("blessed");
-const colors = require("ansi-colors");
-const Table = require("cli-table3");
-const yargs = require("yargs/yargs");
-const { hideBin } = require("yargs/helpers");
+const blessed = require('blessed');
+const colors = require('ansi-colors');
+const Table = require('cli-table3');
+const yargs = require('yargs/yargs');
+const { hideBin } = require('yargs/helpers');
 const {
   slotChars,
   screen,
@@ -15,14 +15,22 @@ const {
   payoutScreen,
   payoutBox,
   instructionsContent,
-} = require("./ui");
-const { titleSpeed, animateTitleFrame, titleFrames, title, logo, logoFrames, animateLogoFrame } = require("./title");
-const { formatDollarAmount } = require("./utils");
+} = require('./ui');
+const {
+  titleSpeed,
+  animateTitleFrame,
+  titleFrames,
+  title,
+  logo,
+  logoFrames,
+  animateLogoFrame,
+} = require('./title');
+const { formatDollarAmount } = require('./utils');
 
-const argv = yargs(hideBin(process.argv)).option("manual", {
-  alias: "m",
-  type: "boolean",
-  description: "Enable manual stop mode",
+const argv = yargs(hideBin(process.argv)).option('manual', {
+  alias: 'm',
+  type: 'boolean',
+  description: 'Enable manual stop mode',
 }).argv;
 
 let total = 100;
@@ -55,33 +63,35 @@ function getRandomChar() {
   return slotChars[Math.floor(Math.random() * slotChars.length)];
 }
 
-function updateUI(message = "") {
+function updateUI(message = '') {
   totalBox.setContent(
     `${animateLogoFrame(currentLogoFrameIndex)}\n\n${animateTitleFrame(titleFrames[currentTitleFrameIndex])}\n\n${
       total < 5
         ? colors.red(formatDollarAmount(total))
         : colors.green(formatDollarAmount(total))
-    }`,
+    }`
   );
 
   slotsBox.setContent(
     colors.gray(`[ ${slots[0][0]} | ${slots[1][0]} | ${slots[2][0]} ]\n`) +
       colors.white(`[ ${slots[0][1]} | ${slots[1][1]} | ${slots[2][1]} ]\n`) +
-      colors.gray(`[ ${slots[0][2]} | ${slots[1][2]} | ${slots[2][2]} ]`),
+      colors.gray(`[ ${slots[0][2]} | ${slots[1][2]} | ${slots[2][2]} ]`)
   );
 
-  betBox.setContent(betOptions
-    .map((option, index) => {
-      const isSelected = index === currentBetIndex;
-      const indicator = isSelected ? colors.green("[*]") : colors.gray("[ ]");
-      const optionColor = isSelected ? colors.green : colors.gray;
-      return `${indicator} ${optionColor(formatDollarAmount(option))}`;
-    })
-    .join("  "));
+  betBox.setContent(
+    betOptions
+      .map((option, index) => {
+        const isSelected = index === currentBetIndex;
+        const indicator = isSelected ? colors.green('[*]') : colors.gray('[ ]');
+        const optionColor = isSelected ? colors.green : colors.gray;
+        return `${indicator} ${optionColor(formatDollarAmount(option))}`;
+      })
+      .join('  ')
+  );
 
   // Update message content
   if (argv.manual && isSpinning) {
-    messageBox.setContent(colors.gray("[Enter] Stop"));
+    messageBox.setContent(colors.gray('[Enter] Stop'));
   } else {
     messageBox.setContent(message);
   }
@@ -119,7 +129,7 @@ function spin() {
   }, titleSpeed);
 
   if (argv.manual) {
-    updateUI(colors.yellow("[Enter] Stop"));
+    updateUI(colors.yellow('[Enter] Stop'));
   } else {
     setTimeout(stopSpinning, slotTimeout);
   }
@@ -143,10 +153,10 @@ function checkWin(finalSlots) {
     const winAmount = bet * slotSettings[winChar].multiplier;
     total += winAmount + bet;
     return colors.green(
-      `You won ${formatDollarAmount(Math.floor(winAmount))}!`,
+      `You won ${formatDollarAmount(Math.floor(winAmount))}!`
     );
   } else {
-    return colors.red("Try again");
+    return colors.red('Try again');
   }
 }
 
@@ -163,40 +173,40 @@ function togglePayoutScreen() {
 
 function showPayoutScreen() {
   const table = new Table({
-    head: ["", ...betOptions.map(bet => formatDollarAmount(bet))],
+    head: ['', ...betOptions.map((bet) => formatDollarAmount(bet))],
     style: {
-      head: ["gray"],
-      border: ["gray"],
+      head: ['gray'],
+      border: ['gray'],
     },
-    colAligns: ["left", ...betOptions.map(() => "right")],
+    colAligns: ['left', ...betOptions.map(() => 'right')],
   });
 
   // Sort slotSettings by multiplier in descending order
   const sortedSlotSettings = Object.entries(slotSettings).sort(
-    (a, b) => b[1].multiplier - a[1].multiplier,
+    (a, b) => b[1].multiplier - a[1].multiplier
   );
 
   for (const [char, settings] of sortedSlotSettings) {
     const payouts = betOptions.map((bet) =>
-      formatDollarAmount(Math.floor(bet * settings.multiplier)).padStart(4),
+      formatDollarAmount(Math.floor(bet * settings.multiplier)).padStart(4)
     );
     table.push([colors.gray(settings.label), ...payouts]);
   }
 
   let content = `${colors.gray(logo)}\n\n${title}\n\n`;
   content += table.toString();
-  content += "\n";
+  content += '\n';
 
   payoutBox.setContent(content);
 
   const instructionsBox = blessed.box({
     parent: payoutScreen,
     bottom: 1,
-    left: "center",
-    width: "100%",
+    left: 'center',
+    width: '100%',
     height: 1,
-    content: colors.gray("[P] Back"),
-    align: "center",
+    content: colors.gray('[P] Back'),
+    align: 'center',
   });
 
   mainBox.hide();
@@ -216,9 +226,9 @@ function hidePayoutScreen() {
 function promptUser() {
   screen.lockKeys = false;
 
-  screen.key(["left", "right", "enter", "q", "p"], (ch, key) => {
+  screen.key(['left', 'right', 'enter', 'q', 'p'], (ch, key) => {
     switch (key.name) {
-      case "left":
+      case 'left':
         if (isSpinning) return;
         if (payoutScreen.hidden) {
           currentBetIndex =
@@ -227,7 +237,7 @@ function promptUser() {
           updateUI();
         }
         break;
-      case "right":
+      case 'right':
         if (isSpinning) return;
         if (payoutScreen.hidden) {
           currentBetIndex = (currentBetIndex + 1) % betOptions.length;
@@ -235,7 +245,7 @@ function promptUser() {
           updateUI();
         }
         break;
-      case "enter":
+      case 'enter':
         if (!payoutScreen.hidden) return;
 
         if (isSpinning) {
@@ -245,10 +255,10 @@ function promptUser() {
           if (!argv.manual) screen.lockKeys = true;
         }
         break;
-      case "q":
+      case 'q':
         exitGame();
         break;
-      case "p":
+      case 'p':
         if (isSpinning) return;
         togglePayoutScreen();
         break;
@@ -259,14 +269,14 @@ function promptUser() {
 function exitGame() {
   screen.destroy();
   console.log(
-    `Thanks for playing. Your final balance is ${formatDollarAmount(total)}`,
+    `Thanks for playing. Your final balance is ${formatDollarAmount(total)}`
   );
   process.exit(0);
 }
 
-screen.key(["escape", "q", "C-c"], exitGame);
+screen.key(['escape', 'q', 'C-c'], exitGame);
 
-process.on("exit", () => {
+process.on('exit', () => {
   screen.destroy();
 });
 

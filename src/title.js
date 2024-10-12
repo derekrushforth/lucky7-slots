@@ -1,10 +1,10 @@
-const colors = require("ansi-colors");
+const colors = require('ansi-colors');
 
 const titleSpeed = 150;
 const logoSpeed = 500; // New constant for logo animation speed
 
 function animateTitleFrame(frame) {
-  const [topLine, bottomLine] = frame.text.split("\n");
+  const [topLine, bottomLine] = frame.text.split('\n');
   return `${frame.topColor(topLine)}\n${frame.bottomColor(bottomLine)}`;
 }
 
@@ -14,23 +14,23 @@ function animateLogoFrame(frameIndex) {
 
 const logo = `
 /\\ /\\
- (${colors.green("7 7")})
+ (${colors.green('7 7')})
  =(:^:)= 
-,,,${colors.green("[ $ ]")},,,
+,,,${colors.green('[ $ ]')},,,
 `;
 
 const logo2 = `
 /\\ /\\
  (- -)
  =(:^:)= 
-,,,${colors.white("[ $ ]")},,,
+,,,${colors.white('[ $ ]')},,,
 `;
 
 const logo3 = `
 /\\ /\\
- (${colors.green("7 7")})
+ (${colors.green('7 7')})
  =(:^:)= 
-,,,${colors.green("[ $ ]")},,'
+,,,${colors.green('[ $ ]')},,'
 `;
 
 const logoFrames = [colors.gray(logo), colors.gray(logo2), colors.gray(logo3)];
@@ -55,5 +55,5 @@ module.exports = {
   titleFrames,
   logoFrames,
   title,
-  logo
+  logo,
 };
