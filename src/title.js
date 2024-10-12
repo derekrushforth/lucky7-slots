@@ -55,4 +55,5 @@ module.exports = {
   titleFrames,
   logoFrames,
   title,
+  logo
 };

@@ -16,7 +16,7 @@ const {
   payoutBox,
   instructionsContent,
 } = require("./ui");
-const { titleSpeed, animateTitleFrame, titleFrames, title, logo,logoFrames, animateLogoFrame } = require("./title");
+const { titleSpeed, animateTitleFrame, titleFrames, title, logo, logoFrames, animateLogoFrame } = require("./title");
 const { formatDollarAmount } = require("./utils");
 
 const argv = yargs(hideBin(process.argv)).option("manual", {
@@ -165,7 +165,7 @@ function showPayoutScreen() {
   const table = new Table({
     head: ["", ...betOptions.map(bet => formatDollarAmount(bet))],
     style: {
-      head: ["cyan"],
+      head: ["gray"],
       border: ["gray"],
     },
     colAligns: ["left", ...betOptions.map(() => "right")],
@@ -180,11 +180,12 @@ function showPayoutScreen() {
     const payouts = betOptions.map((bet) =>
       formatDollarAmount(Math.floor(bet * settings.multiplier)).padStart(4),
     );
-    table.push([settings.label, ...payouts]);
+    table.push([colors.gray(settings.label), ...payouts]);
   }
 
-  let content = `${title}\n\n`;
+  let content = `${colors.gray(logo)}\n\n${title}\n\n`;
   content += table.toString();
+  content += "\n";
 
   payoutBox.setContent(content);
 
