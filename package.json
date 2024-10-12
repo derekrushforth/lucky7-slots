@@ -12,7 +12,8 @@
     "cli-table3": "^0.6.5"
   },
   "devDependencies": {
-    "pkg": "^5.8.1"
+    "pkg": "^5.8.1",
+    "prettier": "^2.8.8"
   },
   "pkg": {
     "targets": [
@@ -24,6 +25,7 @@
   },
   "scripts": {
     "start": "node app.js",
-    "build": "pkg ."
+    "build": "pkg .",
+    "format": "prettier --write \"**/*.{js,json,md}\""
   }
 }
