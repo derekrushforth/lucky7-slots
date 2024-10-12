@@ -16,7 +16,7 @@ const {
   payoutBox,
   instructionsContent,
 } = require("./ui");
-const { animateTitleFrame, titleFrames, title } = require("./title");
+const { titleSpeed,animateTitleFrame, titleFrames, title } = require("./title");
 const { formatDollarAmount } = require("./utils");
 
 const argv = yargs(hideBin(process.argv)).option("manual", {
@@ -27,6 +27,8 @@ const argv = yargs(hideBin(process.argv)).option("manual", {
 
 let total = 100;
 let bet = 5;
+const slotSpeed = 100;
+const slotTimeout = 2000;
 const betOptions = [5, 10, 25];
 let currentBetIndex = 0;
 let isSpinning = false;
@@ -107,17 +109,17 @@ function spin() {
       ]);
       updateUI();
     }
-  }, 100);
+  }, slotSpeed);
 
   titleAnimationInterval = setInterval(() => {
     currentTitleFrameIndex = (currentTitleFrameIndex + 1) % titleFrames.length;
     updateUI();
-  }, 100);
+  }, titleSpeed);
 
   if (argv.manual) {
     updateUI(colors.yellow("[Enter] Stop"));
   } else {
-    setTimeout(stopSpinning, 2000);
+    setTimeout(stopSpinning, slotTimeout);
   }
 }
 
@@ -141,7 +143,7 @@ function checkWin(finalSlots) {
       `You won ${formatDollarAmount(Math.floor(winAmount))}!`,
     );
   } else {
-    return colors.red("Try again!");
+    return colors.red("Try again");
   }
 }
 
