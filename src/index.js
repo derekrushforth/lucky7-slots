@@ -4,7 +4,7 @@ const Table = require("cli-table3");
 const yargs = require("yargs/yargs");
 const { hideBin } = require("yargs/helpers");
 const {
-  title,
+  slotChars,
   screen,
   mainBox,
   totalBox,
@@ -13,8 +13,11 @@ const {
   messageBox,
   instructionsBox,
   payoutScreen,
-  instructionsContent
+  payoutBox,
+  instructionsContent,
 } = require("./ui");
+const { animateTitleFrame, titleFrames, title } = require("./title");
+const { formatDollarAmount } = require("./utils");
 
 const argv = yargs(hideBin(process.argv)).option("manual", {
   alias: "m",
@@ -22,7 +25,14 @@ const argv = yargs(hideBin(process.argv)).option("manual", {
   description: "Enable manual stop mode",
 }).argv;
 
-const slotChars = ["7", "×", "o"];
+let total = 100;
+let bet = 5;
+const betOptions = [5, 10, 25];
+let currentBetIndex = 0;
+let isSpinning = false;
+let spinInterval;
+let titleAnimationInterval;
+let currentTitleFrameIndex = 0;
 
 const slotSettings = {
   [slotChars[0]]: { multiplier: 20, label: slotChars[0].repeat(3) }, // 777
@@ -30,8 +40,6 @@ const slotSettings = {
   [slotChars[2]]: { multiplier: 5, label: slotChars[2].repeat(3) }, // ooo
 };
 
-let total = 100;
-let bet = 5;
 let slots = [
   [slotChars[2], slotChars[0], slotChars[1]],
   [slotChars[1], slotChars[0], slotChars[1]],
@@ -44,44 +52,44 @@ function getRandomChar() {
   return slotChars[Math.floor(Math.random() * slotChars.length)];
 }
 
-let currentBetIndex = 0;
-const betOptions = [5, 10, 25];
-let isSpinning = false;
-
 function updateUI(message = "") {
   const betSelectionDisplay = betOptions
     .map((option, index) => {
       const isSelected = index === currentBetIndex;
       const indicator = isSelected ? colors.green("[*]") : colors.gray("[ ]");
       const optionColor = isSelected ? colors.green : colors.gray;
-      return `${indicator} ${optionColor("$" + option)}`;
+      return `${indicator} ${optionColor(formatDollarAmount(option))}`;
     })
     .join("  ");
 
   totalBox.setContent(
-    `${title}\n\n${
+    `${animateTitleFrame(titleFrames[currentTitleFrameIndex])}\n\n${
       total < 5
-        ? colors.red("$" + total.toFixed(2))
-        : colors.green("$" + total.toFixed(2))
-    }`
+        ? colors.red(formatDollarAmount(total))
+        : colors.green(formatDollarAmount(total))
+    }`,
   );
 
   slotsBox.setContent(
     colors.gray(`[ ${slots[0][0]} | ${slots[1][0]} | ${slots[2][0]} ]\n`) +
       colors.white(`[ ${slots[0][1]} | ${slots[1][1]} | ${slots[2][1]} ]\n`) +
-      colors.gray(`[ ${slots[0][2]} | ${slots[1][2]} | ${slots[2][2]} ]`)
+      colors.gray(`[ ${slots[0][2]} | ${slots[1][2]} | ${slots[2][2]} ]`),
   );
 
   betBox.setContent(betSelectionDisplay);
-  messageBox.setContent(colors.bold(message));
+
+  // Update message content
+  if (argv.manual && isSpinning) {
+    messageBox.setContent(colors.gray("[Enter] Stop"));
+  } else {
+    messageBox.setContent(message);
+  }
 
   // Update instructions
   instructionsBox.setContent(colors.gray(instructionsContent));
 
   screen.render();
 }
-
-let spinInterval;
 
 /**
  *
@@ -101,14 +109,25 @@ function spin() {
     }
   }, 100);
 
-  if (!argv.manual) setTimeout(stopSpinning, 2000);
+  titleAnimationInterval = setInterval(() => {
+    currentTitleFrameIndex = (currentTitleFrameIndex + 1) % titleFrames.length;
+    updateUI();
+  }, 100);
+
+  if (argv.manual) {
+    updateUI(colors.yellow("[Enter] Stop"));
+  } else {
+    setTimeout(stopSpinning, 2000);
+  }
 }
 
 function stopSpinning() {
   isSpinning = false;
   clearInterval(spinInterval);
+  clearInterval(titleAnimationInterval);
 
   const message = checkWin(slots.map((column) => column[1]));
+  currentTitleFrameIndex = 0;
   updateUI(message);
   screen.lockKeys = false;
 }
@@ -119,13 +138,16 @@ function checkWin(finalSlots) {
     const winAmount = bet * slotSettings[winChar].multiplier;
     total += winAmount + bet;
     return colors.green(
-      `You win ${colors.yellow("$" + winAmount.toFixed(2))}!`
+      `You won ${formatDollarAmount(Math.floor(winAmount))}!`,
     );
   } else {
     return colors.red("Try again!");
   }
 }
 
+/**
+ * Payout screen
+ */
 function togglePayoutScreen() {
   if (payoutScreen.hidden) {
     showPayoutScreen();
@@ -133,6 +155,7 @@ function togglePayoutScreen() {
     hidePayoutScreen();
   }
 }
+
 function showPayoutScreen() {
   const table = new Table({
     head: ["", "$5", "$10", "$25"],
@@ -145,28 +168,15 @@ function showPayoutScreen() {
 
   // Sort slotSettings by multiplier in descending order
   const sortedSlotSettings = Object.entries(slotSettings).sort(
-    (a, b) => b[1].multiplier - a[1].multiplier
+    (a, b) => b[1].multiplier - a[1].multiplier,
   );
 
   for (const [char, settings] of sortedSlotSettings) {
-    const payouts = betOptions.map(
-      (bet) =>
-        `$${Math.floor(bet * settings.multiplier)
-          .toString()
-          .padStart(3)}`
+    const payouts = betOptions.map((bet) =>
+      formatDollarAmount(Math.floor(bet * settings.multiplier)).padStart(4),
     );
     table.push([settings.label, ...payouts]);
   }
-
-  const payoutBox = blessed.box({
-    parent: payoutScreen,
-    top: "center",
-    left: "center",
-    width: "80%",
-    height: "80%",
-    align: "center",
-    valign: "middle",
-  });
 
   let content = `${title}\n\n`;
   content += table.toString();
@@ -187,14 +197,19 @@ function showPayoutScreen() {
   payoutScreen.show();
   screen.render();
 }
+
 function hidePayoutScreen() {
   payoutScreen.hide();
   mainBox.show();
   screen.render();
 }
 
+/**
+ * Prompt user for input
+ */
 function promptUser() {
   screen.lockKeys = false;
+
   screen.key(["left", "right", "enter", "q", "p"], (ch, key) => {
     switch (key.name) {
       case "left":
@@ -223,7 +238,6 @@ function promptUser() {
           spin();
           if (!argv.manual) screen.lockKeys = true;
         }
-
         break;
       case "q":
         exitGame();
@@ -238,7 +252,9 @@ function promptUser() {
 
 function exitGame() {
   screen.destroy();
-  console.log(`Thanks for playing. Your final balance is $${total.toFixed(2)}`);
+  console.log(
+    `Thanks for playing. Your final balance is ${formatDollarAmount(total)}`,
+  );
   process.exit(0);
 }
 

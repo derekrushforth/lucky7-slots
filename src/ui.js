@@ -1,16 +1,14 @@
 const blessed = require("blessed");
 const colors = require("ansi-colors");
-const Table = require("cli-table3");
 
-const title = `█   █ █ █▀▀ █▄▀ █▄█ ▀▀█
-█▄▄ █▄█ █▄▄ █ █  █    █`;
+const slotChars = ["7", "×", "o"];
 
 const instructionsContent =
   "[←][→] Change Bet   [Enter] Spin   [P] Payouts   [Q] Quit";
 
 const screen = blessed.screen({
   smartCSR: true,
-  title: "Slots",
+  title: "Lucky7",
 });
 
 const mainBox = blessed.box({
@@ -85,9 +83,18 @@ const payoutScreen = blessed.box({
   hidden: true,
 });
 
-// Export all components at the end of the file
+const payoutBox = blessed.box({
+  parent: payoutScreen,
+  top: "center",
+  left: "center",
+  width: "80%",
+  height: "80%",
+  align: "center",
+  valign: "middle",
+});
+
 module.exports = {
-  title,
+  slotChars,
   screen,
   mainBox,
   contentBox,
@@ -97,5 +104,6 @@ module.exports = {
   messageBox,
   instructionsBox,
   payoutScreen,
-  instructionsContent
+  payoutBox,
+  instructionsContent,
 };
