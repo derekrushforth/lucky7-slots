@@ -16,7 +16,12 @@ const {
   payoutBox,
   instructionsContent,
 } = require('./ui');
-const { titleSpeed, animateTitleFrame, titleFrames, title } = require('./title');
+const {
+  titleSpeed,
+  animateTitleFrame,
+  titleFrames,
+  title,
+} = require('./title');
 const { animateLogoFrame } = require('./logo');
 const { formatDollarAmount } = require('./utils');
 
@@ -58,7 +63,7 @@ function getRandomChar() {
 
 function updateUI(message = '') {
   totalBox.setContent(
-    `${animateLogoFrame(currentLogoFrameIndex)}\n\n${animateTitleFrame(titleFrames[currentTitleFrameIndex])}\n\n${
+    `${animateLogoFrame(currentLogoFrameIndex, 'tap')}\n\n${animateTitleFrame(titleFrames[currentTitleFrameIndex])}\n\n${
       total < 5
         ? colors.red(formatDollarAmount(total))
         : colors.green(formatDollarAmount(total))
@@ -120,7 +125,7 @@ function spin() {
   // Animate title and logo
   titleAnimationInterval = setInterval(() => {
     currentTitleFrameIndex = (currentTitleFrameIndex + 1) % titleFrames.length;
-    currentLogoFrameIndex = (currentLogoFrameIndex + 1);
+    currentLogoFrameIndex = currentLogoFrameIndex + 1;
     updateUI();
   }, titleSpeed);
 
@@ -189,7 +194,7 @@ function showPayoutScreen() {
     table.push([colors.gray(settings.label), ...payouts]);
   }
 
-  let content = `${colors.gray(logo)}\n\n${title}\n\n`;
+  let content = `${animateLogoFrame(currentLogoFrameIndex, 'tap')}\n\n${animateTitleFrame(titleFrames[currentTitleFrameIndex])}\n\n`;
   content += table.toString();
   content += '\n';
 

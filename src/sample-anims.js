@@ -25,15 +25,10 @@ let currentLogoFrameIndex = 0;
 
 function updateAnimation() {
   const content = `
-${animateLogoFrame(currentLogoFrameIndex)}
-
+${animateLogoFrame(currentLogoFrameIndex)}\n\n
+${animateLogoFrame(currentLogoFrameIndex, 'tap')}\n\n
+${animateLogoFrame(currentLogoFrameIndex, 'eyes')}\n
 ${animateTitleFrame(titleFrames[currentTitleFrameIndex])}
-
-
-${animateLogoFrame(currentLogoFrameIndex, 'blinking')}
-
-${animateTitleFrame(titleFrames[currentTitleFrameIndex])}
-
   `;
 
   animationBox.setContent(content);
