@@ -1,4 +1,4 @@
-const colors = require('ansi-colors');
+import colors from 'ansi-colors';
 
 const logoSpeed = 150;
 
@@ -104,7 +104,7 @@ function animateLogoFrame(frameIndex, animationName = 'default') {
   return frames[frameIndex % frames.length];
 }
 
-module.exports = {
+export {
   logoSpeed,
   animateLogoFrame,
   logoAnimations,

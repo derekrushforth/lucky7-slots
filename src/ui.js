@@ -1,5 +1,5 @@
-const blessed = require('blessed');
-const colors = require('ansi-colors');
+import blessed from 'blessed';
+import colors from 'ansi-colors';
 
 const slotChars = ['7', '×', 'o'];
 
@@ -93,7 +93,7 @@ const payoutBox = blessed.box({
   valign: 'middle',
 });
 
-module.exports = {
+export {
   slotChars,
   screen,
   mainBox,

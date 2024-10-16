@@ -1,4 +1,4 @@
-const colors = require('ansi-colors');
+import colors from 'ansi-colors';
 
 const titleSpeed = 150;
 
@@ -20,7 +20,7 @@ const titleFrames = [
   { text: title, topColor: colors.red, bottomColor: colors.white },
 ];
 
-module.exports = {
+export {
   titleSpeed,
   animateTitleFrame,
   titleFrames,

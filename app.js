@@ -1,5 +1,5 @@
 #!/usr/bin/env node
 
-const slotMachine = require('./src');
+import { start } from './src/index.js';
 
-slotMachine.start();
+start();

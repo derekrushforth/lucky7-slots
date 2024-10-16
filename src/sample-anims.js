@@ -1,6 +1,6 @@
-const blessed = require('blessed');
-const { titleSpeed, animateTitleFrame, titleFrames } = require('./title');
-const { animateLogoFrame } = require('./logo');
+import blessed from 'blessed';
+import { titleSpeed, animateTitleFrame, titleFrames } from './title';
+import { animateLogoFrame } from './logo';
 
 // Create a new screen
 const screen = blessed.screen({

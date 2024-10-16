@@ -1,9 +1,9 @@
-const blessed = require('blessed');
-const colors = require('ansi-colors');
-const Table = require('cli-table3');
-const yargs = require('yargs/yargs');
-const { hideBin } = require('yargs/helpers');
-const {
+import blessed from 'blessed';
+import colors from 'ansi-colors';
+import Table from 'cli-table3';
+import yargs from 'yargs';
+import { hideBin } from 'yargs/helpers';
+import {
   slotChars,
   screen,
   mainBox,
@@ -15,21 +15,23 @@ const {
   payoutScreen,
   payoutBox,
   instructionsContent,
-} = require('./ui');
-const {
+} from './ui.js';
+import {
   titleSpeed,
   animateTitleFrame,
   titleFrames,
   title,
-} = require('./title');
-const { animateLogoFrame } = require('./logo');
-const { formatDollarAmount } = require('./utils');
+} from './title.js';
+import { animateLogoFrame } from './logo.js';
+import { formatDollarAmount } from './utils.js';
 
-const argv = yargs(hideBin(process.argv)).option('manual', {
-  alias: 'm',
-  type: 'boolean',
-  description: 'Enable manual stop mode',
-}).argv;
+const argv = yargs(hideBin(process.argv))
+  .option('manual', {
+    alias: 'm',
+    type: 'boolean',
+    description: 'Enable manual stop mode',
+  })
+  .parse();
 
 let total = 100;
 let bet = 1;
@@ -286,6 +288,4 @@ function start() {
   promptUser();
 }
 
-module.exports = {
-  start,
-};
+export { start };
