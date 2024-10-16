@@ -21,10 +21,10 @@ import { animateLogoFrame } from './logo.js';
 import { formatDollarAmount } from './utils.js';
 
 const argv = yargs(hideBin(process.argv))
-  .option('manual', {
-    alias: 'm',
+  .option('auto', {
+    alias: 'a',
     type: 'boolean',
-    description: 'Enable manual stop mode',
+    description: 'Enable automatic stop mode',
   })
   .parse();
 
@@ -85,7 +85,7 @@ function updateUI(message = '') {
   );
 
   // Update message content
-  if (argv.manual && isSpinning) {
+  if (!argv.auto && isSpinning) {
     messageBox.setContent(colors.gray('[Enter] Stop'));
   } else {
     messageBox.setContent(message);
@@ -126,10 +126,10 @@ function spin() {
     updateUI();
   }, titleSpeed);
 
-  if (argv.manual) {
-    updateUI(colors.yellow('[Enter] Stop'));
-  } else {
+  if (argv.auto) {
     setTimeout(stopSpinning, slotTimeout);
+  } else {
+    updateUI(colors.yellow('[Enter] Stop'));
   }
 }
 
@@ -247,10 +247,10 @@ function promptUser() {
         if (!payoutScreen.hidden) return;
 
         if (isSpinning) {
-          if (argv.manual) stopSpinning();
+          if (!argv.auto) stopSpinning();
         } else {
           spin();
-          if (!argv.manual) screen.lockKeys = true;
+          if (argv.auto) screen.lockKeys = true;
         }
         break;
       case 'q':
