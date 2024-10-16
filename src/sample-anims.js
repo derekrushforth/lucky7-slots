@@ -1,6 +1,6 @@
 import blessed from 'blessed';
-import { titleSpeed, animateTitleFrame, titleFrames } from './title';
-import { animateLogoFrame } from './logo';
+import { titleSpeed, animateTitleFrame, titleFrames } from './title.js';
+import { animateLogoFrame } from './logo.js';
 
 // Create a new screen
 const screen = blessed.screen({
