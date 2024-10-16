@@ -1,10 +1,11 @@
 {
   "name": "lucky7-slots",
+  "description": "A simple command-line slot machine",
   "version": "0.0.1",
   "main": "app.js",
   "type": "module",
   "bin": {
-    "luck7-slots": "./app.js"
+    "lucky7-slots": "./app.js"
   },
   "dependencies": {
     "ansi-colors": "^4.1.3",
