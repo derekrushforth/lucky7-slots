@@ -1,6 +1,6 @@
 {
   "name": "lucky7-slots",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "main": "app.js",
   "bin": {
     "luck7-slots": "./app.js"
