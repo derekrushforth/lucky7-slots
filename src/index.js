@@ -16,12 +16,7 @@ import {
   payoutBox,
   instructionsContent,
 } from './ui.js';
-import {
-  titleSpeed,
-  animateTitleFrame,
-  titleFrames,
-  title,
-} from './title.js';
+import { titleSpeed, animateTitleFrame, titleFrames, title } from './title.js';
 import { animateLogoFrame } from './logo.js';
 import { formatDollarAmount } from './utils.js';
 

@@ -20,9 +20,4 @@ const titleFrames = [
   { text: title, topColor: colors.red, bottomColor: colors.white },
 ];
 
-export {
-  titleSpeed,
-  animateTitleFrame,
-  titleFrames,
-  title,
-};
+export { titleSpeed, animateTitleFrame, titleFrames, title };

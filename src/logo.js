@@ -40,7 +40,7 @@ const logoAnimations = {
 =(:^:)=
 ,}}${colors.green('[  $  ]')}{{,
 `),
-  colors.gray(`
+    colors.gray(`
 /\\ /\\
 (- -)
 =(:^:)=
@@ -64,8 +64,8 @@ const logoAnimations = {
 =(:^:)=
 ,,,${colors.green('[ $ ]')}’’’
 `),
-// Frame 1: Eyes open
-colors.gray(`
+    // Frame 1: Eyes open
+    colors.gray(`
 /\\ /\\
 (${colors.green('7 7')})
 =(:^:)=
@@ -104,8 +104,4 @@ function animateLogoFrame(frameIndex, animationName = 'default') {
   return frames[frameIndex % frames.length];
 }
 
-export {
-  logoSpeed,
-  animateLogoFrame,
-  logoAnimations,
-};
+export { logoSpeed, animateLogoFrame, logoAnimations };
