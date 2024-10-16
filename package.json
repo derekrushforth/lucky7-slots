@@ -1,7 +1,7 @@
 {
   "name": "lucky7-slots",
   "description": "A simple command-line slot machine",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "main": "app.js",
   "type": "module",
   "bin": {
