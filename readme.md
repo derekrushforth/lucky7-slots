@@ -1,4 +1,4 @@
-![Slot Machine](./media/hero.gif)
+![Slot Machine](https://raw.githubusercontent.com/derekrushforth/lucky7-slots/refs/heads/main/media/hero.gif)
 
 A super simple command-line slot machine in node.js
 
