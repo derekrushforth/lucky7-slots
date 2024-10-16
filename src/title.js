@@ -1,16 +1,16 @@
 import colors from 'ansi-colors';
 
-const titleSpeed = 150;
+export const titleSpeed = 150;
 
-function animateTitleFrame(frame) {
+export function animateTitleFrame(frame) {
   const [topLine, bottomLine] = frame.text.split('\n');
   return `${frame.topColor(topLine)}\n${frame.bottomColor(bottomLine)}`;
 }
 
-const title = `█   █ █ █▀▀ █▄▀ █▄█ ▀▀█
+export const title = `█   █ █ █▀▀ █▄▀ █▄█ ▀▀█
 █▄▄ █▄█ █▄▄ █ █  █    █`;
 
-const titleFrames = [
+export const titleFrames = [
   { text: title, topColor: colors.white, bottomColor: colors.white },
   { text: title, topColor: colors.white, bottomColor: colors.green },
   { text: title, topColor: colors.green, bottomColor: colors.green },
@@ -19,5 +19,3 @@ const titleFrames = [
   { text: title, topColor: colors.red, bottomColor: colors.red },
   { text: title, topColor: colors.red, bottomColor: colors.white },
 ];
-
-export { titleSpeed, animateTitleFrame, titleFrames, title };

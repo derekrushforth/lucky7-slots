@@ -1,24 +1,24 @@
 import blessed from 'blessed';
 import colors from 'ansi-colors';
 
-const slotChars = ['7', '×', 'o'];
+export const slotChars = ['7', '×', 'o'];
 
-const instructionsContent =
+export const instructionsContent =
   '[←][→] Change Bet   [Enter] Spin   [P] Payouts   [Q] Quit';
 
-const screen = blessed.screen({
+export const screen = blessed.screen({
   smartCSR: true,
   title: 'Lucky7',
 });
 
-const mainBox = blessed.box({
+export const mainBox = blessed.box({
   top: 0,
   left: 0,
   width: '100%',
   height: '100%',
 });
 
-const contentBox = blessed.box({
+export const contentBox = blessed.box({
   parent: mainBox,
   top: 'center',
   left: 'center',
@@ -28,7 +28,7 @@ const contentBox = blessed.box({
   valign: 'middle',
 });
 
-const totalBox = blessed.box({
+export const totalBox = blessed.box({
   parent: contentBox,
   top: 0,
   width: '100%',
@@ -37,7 +37,7 @@ const totalBox = blessed.box({
   align: 'center',
 });
 
-const slotsBox = blessed.box({
+export const slotsBox = blessed.box({
   parent: contentBox,
   top: 11,
   width: '100%',
@@ -46,7 +46,7 @@ const slotsBox = blessed.box({
   align: 'center',
 });
 
-const messageBox = blessed.box({
+export const messageBox = blessed.box({
   parent: contentBox,
   top: 16,
   width: '100%',
@@ -55,7 +55,7 @@ const messageBox = blessed.box({
   align: 'center',
 });
 
-const betBox = blessed.box({
+export const betBox = blessed.box({
   parent: contentBox,
   top: 19,
   width: '100%',
@@ -64,7 +64,7 @@ const betBox = blessed.box({
   align: 'center',
 });
 
-const instructionsBox = blessed.box({
+export const instructionsBox = blessed.box({
   parent: mainBox,
   bottom: 1,
   left: 'center',
@@ -74,7 +74,7 @@ const instructionsBox = blessed.box({
   align: 'center',
 });
 
-const payoutScreen = blessed.box({
+export const payoutScreen = blessed.box({
   parent: screen,
   top: 0,
   left: 0,
@@ -83,7 +83,7 @@ const payoutScreen = blessed.box({
   hidden: true,
 });
 
-const payoutBox = blessed.box({
+export const payoutBox = blessed.box({
   parent: payoutScreen,
   top: 'center',
   left: 'center',
@@ -92,18 +92,3 @@ const payoutBox = blessed.box({
   align: 'center',
   valign: 'middle',
 });
-
-export {
-  slotChars,
-  screen,
-  mainBox,
-  contentBox,
-  totalBox,
-  slotsBox,
-  betBox,
-  messageBox,
-  instructionsBox,
-  payoutScreen,
-  payoutBox,
-  instructionsContent,
-};

@@ -1,8 +1,8 @@
 import colors from 'ansi-colors';
 
-const logoSpeed = 150;
+export const logoSpeed = 150;
 
-const logoAnimations = {
+export const logoAnimations = {
   // Stretching dollar bill
   default: [
     // Frame 1
@@ -99,9 +99,7 @@ const logoAnimations = {
   ],
 };
 
-function animateLogoFrame(frameIndex, animationName = 'default') {
+export function animateLogoFrame(frameIndex, animationName = 'default') {
   const frames = logoAnimations[animationName] || logoAnimations.default;
   return frames[frameIndex % frames.length];
 }
-
-export { logoSpeed, animateLogoFrame, logoAnimations };

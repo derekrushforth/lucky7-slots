@@ -278,9 +278,7 @@ process.on('exit', () => {
   screen.destroy();
 });
 
-function start() {
+export function start() {
   updateUI();
   promptUser();
 }
-
-export { start };
