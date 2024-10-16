@@ -1,6 +1,6 @@
 ![Slot Machine](./media/hero.gif)
 
-> A super simple command-line slot machine
+A super simple command-line slot machine in node.js
 
 ```bash
 # Play
